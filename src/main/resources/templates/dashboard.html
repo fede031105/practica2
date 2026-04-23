@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sistema Clínico | Dashboard</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" th:href="@{/plugins/fontawesome-free/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}">
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+            </li>
+        </ul>
+
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item d-none d-sm-inline-block">
+        <span class="nav-link text-primary font-weight-bold">
+          <i class="fas fa-user-circle"></i> <span th:text="${session.usuarioLogueado}">Federico</span>
+        </span>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a th:href="@{/logout}" class="nav-link text-danger">
+                    <i class="fas fa-sign-out-alt"></i> Salir
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <a th:href="@{/dashboard}" class="brand-link">
+            <span class="brand-text font-weight-light ml-3">Gestión Clínica</span>
+        </a>
+
+        <div class="sidebar">
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="image">
+                    <i class="fas fa-user fa-2x text-white mt-1"></i>
+                </div>
+                <div class="info">
+                    <a href="#" class="d-block" th:text="${session.usuarioLogueado}">Federico</a>
+                </div>
+            </div>
+
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                    <li class="nav-item">
+                        <a th:href="@{/dashboard}" class="nav-link active">
+                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <p>Panel de Control</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a th:href="@{/pacientes}" class="nav-link">
+                            <i class="nav-icon fas fa-users"></i>
+                            <p>Pacientes</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a th:href="@{/consultas}" class="nav-link">
+                            <i class="nav-icon fas fa-calendar-check"></i>
+                            <p>Citas Médicas</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a th:href="@{/estadisticas}" class="nav-link">
+                            <i class="nav-icon fas fa-chart-pie"></i>
+                            <p>Estadísticas</p>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </aside>
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Panel de Control</h1>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-info">
+                            <div class="inner">
+                                <h3 th:text="${totalPacientes}">0</h3>
+                                <p>Pacientes Registrados</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-user-injured"></i>
+                            </div>
+                            <a th:href="@{/pacientes}" class="small-box-footer">Ir a pacientes <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-success">
+                            <div class="inner">
+                                <h3 th:text="${totalConsultas}">0</h3>
+                                <p>Citas Totales</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <a th:href="@{/consultas}" class="small-box-footer">Ir a citas <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-warning">
+                            <div class="inner">
+                                <h3 th:text="${consultasHoy}">0</h3>
+                                <p>Citas para Hoy</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <a th:href="@{/consultas}" class="small-box-footer">Ver agenda <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-danger">
+                            <div class="inner">
+                                <h3>Estadísticas</h3>
+                                <p>Gráficas del sistema</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <a th:href="@{/estadisticas}" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="fas fa-clinic-medical mr-1"></i> Resumen de la Clínica</h3>
+                            </div>
+                            <div class="card-body">
+                                ¡Bienvenido al sistema <span th:text="${session.usuarioLogueado}">Federico</span>! Usa el menú lateral para gestionar los pacientes y la agenda médica.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="main-footer">
+        <div class="float-right d-none d-sm-block">
+            <b>Versión</b> 1.0
+        </div>
+        <strong>Copyright &copy; 2026.</strong> Todos los derechos reservados.
+    </footer>
+</div>
+
+<script th:src="@{/plugins/jquery/jquery.min.js}"></script>
+<script th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/dist/js/adminlte.min.js}"></script>
+</body>
+</html>

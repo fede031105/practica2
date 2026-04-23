@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Sistema Clínico | Agendar Cita</title>
+    <link rel="stylesheet" th:href="@{/plugins/fontawesome-free/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}">
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+        <span class="nav-link text-primary font-weight-bold">
+          <i class="fas fa-user-circle"></i> <span th:text="${session.usuarioLogueado}"></span>
+        </span>
+            </li>
+        </ul>
+    </nav>
+
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <a th:href="@{/dashboard}" class="brand-link">
+            <span class="brand-text font-weight-light ml-3">Gestión Clínica</span>
+        </a>
+        <div class="sidebar">
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column">
+                    <li class="nav-item"><a th:href="@{/dashboard}" class="nav-link"><p>Panel de Control</p></a></li>
+                    <li class="nav-item"><a th:href="@{/pacientes}" class="nav-link"><p>Pacientes</p></a></li>
+                    <li class="nav-item"><a th:href="@{/consultas}" class="nav-link active"><p>Citas Médicas</p></a></li>
+                </ul>
+            </nav>
+        </div>
+    </aside>
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 th:text="${consulta.id_consulta == null ? 'Agendar Nueva Cita' : 'Actualizar Cita'}"></h1>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="card card-success">
+                    <form th:action="@{/consultas/guardar}" th:object="${consulta}" method="post">
+                        <input type="hidden" th:field="*{id_consulta}" />
+
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="id_paciente">Paciente</label>
+                                <select class="form-control" th:field="*{id_paciente}" required>
+                                    <option value="">-- Seleccione un paciente --</option>
+                                    <option th:each="p : ${pacientes}"
+                                            th:value="${p.id_paciente}"
+                                            th:text="${p.nombre}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="fecha">Fecha de la Cita</label>
+                                <input type="date" class="form-control" th:field="*{fecha}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="motivo">Motivo de Consulta</label>
+                                <input type="text" class="form-control" th:field="*{motivo}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="diagnostico">Diagnóstico (Opcional al agendar)</label>
+                                <input type="text" class="form-control" th:field="*{diagnostico}">
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-success">Guardar Cita</button>
+                            <a th:href="@{/consultas}" class="btn btn-default float-right">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<script th:src="@{/plugins/jquery/jquery.min.js}"></script>
+<script th:src="@{/dist/js/adminlte.min.js}"></script>
+</body>
+</html>

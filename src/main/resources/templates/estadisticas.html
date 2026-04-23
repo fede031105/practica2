@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Sistema Clínico | Estadísticas</title>
+    <link rel="stylesheet" th:href="@{/plugins/fontawesome-free/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}">
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <span class="nav-link text-primary font-weight-bold">
+                    <i class="fas fa-user-circle"></i> <span th:text="${session.usuarioLogueado}"></span>
+                </span>
+            </li>
+        </ul>
+    </nav>
+
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <a th:href="@{/dashboard}" class="brand-link">
+            <span class="brand-text font-weight-light ml-3">Gestión Clínica</span>
+        </a>
+        <div class="sidebar">
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column">
+                    <li class="nav-item"><a th:href="@{/dashboard}" class="nav-link"><p>Panel de Control</p></a></li>
+                    <li class="nav-item"><a th:href="@{/pacientes}" class="nav-link"><p>Pacientes</p></a></li>
+                    <li class="nav-item"><a th:href="@{/consultas}" class="nav-link"><p>Citas Médicas</p></a></li>
+                    <li class="nav-item"><a th:href="@{/estadisticas}" class="nav-link active"><p>Estadísticas</p></a></li>
+                </ul>
+            </nav>
+        </div>
+    </aside>
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid"><h1>Estadísticas del Sistema</h1></div>
+        </section>
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card card-danger">
+                            <div class="card-header"><h3 class="card-title">Distribución General (Donut)</h3></div>
+                            <div class="card-body"><canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas></div>
+                        </div>
+                        <div class="card card-success">
+                            <div class="card-header"><h3 class="card-title">Crecimiento de Registros (Bar)</h3></div>
+                            <div class="card-body"><canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card card-danger">
+                            <div class="card-header"><h3 class="card-title">Pacientes vs Consultas (Pie)</h3></div>
+                            <div class="card-body"><canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas></div>
+                        </div>
+                        <div class="card card-success">
+                            <div class="card-header"><h3 class="card-title">Actividad Mensual (Stacked Bar)</h3></div>
+                            <div class="card-body"><canvas id="stackedBarChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script th:src="@{/plugins/jquery/jquery.min.js}"></script>
+<script th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/plugins/chart.js/Chart.min.js}"></script>
+<script th:src="@{/dist/js/adminlte.min.js}"></script>
+
+<script th:inline="javascript">
+    const totalPacientes = [[${totalPacientes}]];
+    const totalConsultas = [[${totalConsultas}]];
+
+    const areaChartData = {
+        labels: ['Pacientes', 'Consultas'],
+        datasets: [{
+            label: 'Totales',
+            backgroundColor: ['#f56954', '#00a65a'],
+            data: [totalPacientes, totalConsultas]
+        }]
+    };
+
+    const donutCanvas = $('#donutChart').get(0).getContext('2d');
+    new Chart(donutCanvas, { type: 'doughnut', data: areaChartData });
+
+    const pieCanvas = $('#pieChart').get(0).getContext('2d');
+    new Chart(pieCanvas, { type: 'pie', data: areaChartData });
+
+    const barCanvas = $('#barChart').get(0).getContext('2d');
+    new Chart(barCanvas, { type: 'bar', data: areaChartData });
+
+    const stackedCanvas = $('#stackedBarChart').get(0).getContext('2d');
+    new Chart(stackedCanvas, { type: 'bar', data: areaChartData, options: { scales: { xAxes: [{ stacked: true }], yAxes: [{ stacked: true }] } } });
+</script>
+</body>
+</html>

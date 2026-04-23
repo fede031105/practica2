@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Sistema Clínico | Citas Médicas</title>
+    <link rel="stylesheet" th:href="@{/plugins/fontawesome-free/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}">
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+        <span class="nav-link text-primary font-weight-bold">
+          <i class="fas fa-user-circle"></i> <span th:text="${session.usuarioLogueado}"></span>
+        </span>
+            </li>
+        </ul>
+    </nav>
+
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <a th:href="@{/dashboard}" class="brand-link">
+            <span class="brand-text font-weight-light ml-3">Gestión Clínica</span>
+        </a>
+        <div class="sidebar">
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column">
+                    <li class="nav-item"><a th:href="@{/dashboard}" class="nav-link"><p>Panel de Control</p></a></li>
+                    <li class="nav-item"><a th:href="@{/pacientes}" class="nav-link"><p>Pacientes</p></a></li>
+                    <li class="nav-item"><a th:href="@{/consultas}" class="nav-link active"><p>Citas Médicas</p></a></li>
+                </ul>
+            </nav>
+        </div>
+    </aside>
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Listado de Citas Médicas</h1>
+                    </div>
+                    <div class="col-sm-6 text-right">
+                        <a th:href="@{/consultas/crear}" class="btn btn-success">
+                            <i class="fas fa-plus"></i> Agendar Cita
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="card">
+                    <div class="card-body p-0">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>ID Cita</th>
+                                <th>ID Paciente</th>
+                                <th>Fecha</th>
+                                <th>Motivo</th>
+                                <th>Diagnóstico</th>
+                                <th>Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="consulta : ${consultas}">
+                                <td th:text="${consulta.id_consulta}"></td>
+                                <td th:text="${consulta.id_paciente}"></td>
+                                <td th:text="${consulta.fecha}"></td>
+                                <td th:text="${consulta.motivo}"></td>
+                                <td th:text="${consulta.diagnostico}"></td>
+                                <td>
+                                    <a th:href="@{/consultas/editar/{id}(id=${consulta.id_consulta})}" class="btn btn-sm btn-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a th:href="@{/consultas/eliminar/{id}(id=${consulta.id_consulta})}" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de cancelar esta cita?');">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<script th:src="@{/plugins/jquery/jquery.min.js}"></script>
+<script th:src="@{/dist/js/adminlte.min.js}"></script>
+</body>
+</html>
